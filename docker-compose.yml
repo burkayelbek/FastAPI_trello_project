@@ -1,0 +1,29 @@
+version: '3.10'
+
+volumes:
+  trello-case-postgres: {}
+
+services:
+  trello-case:
+    container_name: trello-case
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    command: /start-sh
+
+  postgres:
+    image: postgres:14
+    container_name: trello-case-postgres
+    volumes:
+      - trello-case-postgres:/var/lib/postgresql/data:Z
+    env_file:
+      - .env
+    ports:
+      - "6432:5432"
