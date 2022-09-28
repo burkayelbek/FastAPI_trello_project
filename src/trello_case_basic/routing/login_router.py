@@ -1,21 +1,15 @@
 from datetime import timedelta, datetime
 from typing import Optional
+from fastapi import (APIRouter, Depends, HTTPException, Response, status)
+from fastapi.security import OAuth2PasswordRequestForm
+from jose import (jwt, JWTError)
+from src.schemas.user import LoginToken
+from sqlalchemy.orm import Session
 from src.service.user import verify_password
 from src.base.utils import AuthBearerToken
 from src.base.settings import settings
 from src.service.user import get_user
 from src.base.database import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import Response
-from fastapi import status
-from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt
-from jose import JWTError
-from src.schemas.user import LoginToken
-from sqlalchemy.orm import Session
-
 
 
 router = APIRouter()

@@ -1,7 +1,6 @@
 from src.base.database import Base
 from sqlalchemy import (Column, Integer, String, Boolean, Date, ForeignKey)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.expression import null, text
 
 
 class ProjectModel(Base):

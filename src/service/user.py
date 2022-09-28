@@ -1,9 +1,8 @@
-from src.models.user import UserModel
-from src.schemas.user import UserCreate
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from passlib.context import CryptContext  # For Hashing Password
 from src.models.user import UserModel
-from sqlalchemy import or_
+from src.schemas.user import UserCreate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -24,7 +23,7 @@ def create_new_user(user: UserCreate, db: Session):
 
 
 def get_user(username: str, db: Session):
-    user = db.query(UserModel).filter(or_(UserModel.username == username,  UserModel.email == username)).first()
+    user = db.query(UserModel).filter(or_(UserModel.username == username, UserModel.email == username)).first()
     return user
 
 
