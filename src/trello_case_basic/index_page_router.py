@@ -1,8 +1,6 @@
-from fastapi.responses import RedirectResponse
-from src.trello_case_basic import (
-    Request,
-)
 from fastapi import APIRouter
+from fastapi.responses import RedirectResponse
+
 
 router = APIRouter()
 
