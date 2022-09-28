@@ -22,3 +22,5 @@ websockets==10.3
 python-dotenv==0.19.2
 python-jose==3.3.0
 python-multipart==0.0.5
+passlib[bcrypt]
+pydantic[email]
