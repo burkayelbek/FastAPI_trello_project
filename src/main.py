@@ -2,18 +2,22 @@ import uvicorn
 from src.trello_case_basic import app
 from argparse import ArgumentParser
 from dotenv import load_dotenv
-from src.base.database import DatabaseManagement
+from src.base.database import get_db
 from src.models.comment import CommentModel
 from src.models.user import UserModel
 from src.models.project import ProjectModel
 from src.models.job import JobModel
 from fastapi.responses import RedirectResponse
+from src.base.settings import Settings
 
-DATABASE_MANAGEMENT = DatabaseManagement()
-DATABASE_MANAGEMENT.postgresql_create_tables()
+settings = Settings()
 
-# with DATABASE_MANAGEMENT as db:  # Otherwise cannot see dunder methods in DatabaseManagement class.
-#     db.postgresql_create_tables()
+
+def create_tables():
+    CommentModel.metadata.create_all(bind=settings.postgresql_database_connection())
+    UserModel.metadata.create_all(bind=settings.postgresql_database_connection())
+    ProjectModel.metadata.create_all(bind=settings.postgresql_database_connection())
+    JobModel.metadata.create_all(bind=settings.postgresql_database_connection())
 
 
 def parse_arguments() -> ArgumentParser:
@@ -47,7 +51,7 @@ def run(args: ArgumentParser):
     :return:
     """
     uvicorn.run(
-        app="trello_case_basic.router:app",
+        app="trello_case_basic.base_router:app",
         host="0.0.0.0",
         port=8000,
         reload=args.reload,
@@ -55,11 +59,6 @@ def run(args: ArgumentParser):
         access_log=args.access_log,
         env_file=args.env,
     )
-
-
-@app.get("/", include_in_schema=False)
-async def docs_redirect():
-    return RedirectResponse(url='/docs')
 
 
 if __name__ == "__main__":

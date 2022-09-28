@@ -12,5 +12,5 @@ class ProjectModel(Base):
     created_at = Column(Date)
     is_active = Column(Boolean, default=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
-    owner = relationship("UserModel", back_populates="project", foreign_keys=[owner_id])
+    owner = relationship("UserModel", back_populates="projects", foreign_keys=[owner_id])
     jobs = relationship("JobModel", back_populates="project")
