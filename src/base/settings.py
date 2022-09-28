@@ -5,6 +5,7 @@ DATABASE_BASE_URL = "postgresql+psycopg2://"
 
 
 class Settings:
+    SECRET_KEY: str = getenv("SECRET_KEY")
 
     def postgresql_database_connection(self) -> object:
         """
@@ -23,3 +24,6 @@ class Settings:
         )
 
         return engine
+
+
+settings = Settings()
