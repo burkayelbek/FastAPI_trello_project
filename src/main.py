@@ -13,11 +13,10 @@ from src.base.settings import Settings
 settings = Settings()
 
 
-def create_tables():
-    CommentModel.metadata.create_all(bind=settings.postgresql_database_connection())
-    UserModel.metadata.create_all(bind=settings.postgresql_database_connection())
-    ProjectModel.metadata.create_all(bind=settings.postgresql_database_connection())
-    JobModel.metadata.create_all(bind=settings.postgresql_database_connection())
+CommentModel.metadata.create_all(bind=settings.postgresql_database_connection())
+UserModel.metadata.create_all(bind=settings.postgresql_database_connection())
+ProjectModel.metadata.create_all(bind=settings.postgresql_database_connection())
+JobModel.metadata.create_all(bind=settings.postgresql_database_connection())
 
 
 def parse_arguments() -> ArgumentParser:

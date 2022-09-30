@@ -8,10 +8,7 @@ class Settings:
     SECRET_KEY: str = getenv("SECRET_KEY")
 
     def postgresql_database_connection(self) -> object:
-        """
-        This Function Provide Connection To Platform Integration Postgresql Database.
-        :return: models connection
-        """
+
         engine = create_engine(
             "{BASE_URL}{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}".format(
                 BASE_URL=DATABASE_BASE_URL,

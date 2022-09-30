@@ -8,13 +8,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_new_user(user: UserCreate, db: Session):
-    new_user = UserModel(
-        username=user.username,
-        hashed_password=_hash_password(user.password),
-        email=user.email,
-        is_active=True,
-        is_superuser=False
-    )
+    new_user = UserModel(username=user.username,
+                         hashed_password=_hash_password(user.password),
+                         email=user.email,
+                         is_active=True,
+                         is_superuser=False)
 
     db.add(new_user)
     db.commit()
@@ -22,7 +20,7 @@ def create_new_user(user: UserCreate, db: Session):
     return new_user
 
 
-def get_user(username: str, db: Session):
+def get_user_by_id(username: str, db: Session):
     user = db.query(UserModel).filter(or_(UserModel.username == username, UserModel.email == username)).first()
     return user
 
