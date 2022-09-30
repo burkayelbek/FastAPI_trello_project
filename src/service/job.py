@@ -61,6 +61,6 @@ def _get_existing_job(id: int, db: Session):
 
 def status_task_celery(user_id: int):
     session = SessionLocal()
-    tasks = session.query(JobModel).filter(JobModel.job_owner_id == user_id).all()
-
-    return {"result": f"{tasks} tamamlandi"}
+    jobs = session.query(JobModel).filter(JobModel.job_owner_id == user_id).all()
+    message = {"Status": f"{jobs} completed successfully!"}
+    return message

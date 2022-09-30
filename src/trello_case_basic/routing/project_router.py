@@ -26,13 +26,13 @@ def create_project(
     return new_project
 
 
-@router.get("", response_model=List[ShowProject])
+@router.get("/get-all-projects", response_model=List[ShowProject])
 def get_projects(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user_from_token), ):
     projects = get_all_projects(db=db, owner_id=current_user.id)
     return projects
 
 
-@router.get("/get-project/{id}", response_model=ShowProject)
+@router.get("/get-project-by-id/{id}", response_model=ShowProject)
 def get_project(id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user_from_token), ):
     project = get_project_by_id(id=id, db=db, owner_id=current_user.id)
     if not project:
@@ -40,7 +40,7 @@ def get_project(id: int, db: Session = Depends(get_db), current_user: UserModel 
     return project
 
 
-@router.put("/update/{id}")
+@router.put("/update-project-by-id/{id}")
 def update_project_put(id: int, project: ProjectUpdate, db: Session = Depends(get_db),
                    current_user: UserModel = Depends(get_current_user_from_token)):
     selected_project = full_update_project_by_id(id=id, project=project, db=db, owner_id=current_user)
@@ -49,7 +49,7 @@ def update_project_put(id: int, project: ProjectUpdate, db: Session = Depends(ge
     return selected_project
 
 
-@router.delete("/delete/{id}")
+@router.delete("/delete-project-by-id/{id}")
 def delete_project(id: int, db: Session = Depends(get_db),
                    current_user: UserModel = Depends(get_current_user_from_token)):
     selected_project = delete_project_by_id(id=id, db=db)

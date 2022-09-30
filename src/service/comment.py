@@ -23,8 +23,8 @@ def create_new_comment(comment: CommentCreate, db: Session, id: int, user_id: in
 def get_all_comments(db: Session, id: int, user_id: int):
     get_comment = db.query(JobModel).filter(and_(JobModel.id == id, JobModel.job_owner_id == user_id))
     if get_comment.first():
-        tasks = db.query(CommentModel).filter(CommentModel.comment_id == id).all()
-        return tasks
+        jobs = db.query(CommentModel).filter(CommentModel.comment_id == id).all()
+        return jobs
     else:
         return False
 

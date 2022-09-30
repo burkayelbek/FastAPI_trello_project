@@ -10,7 +10,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.post("/create", response_model=UserOut)
+@router.post("/register", response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     user = create_new_user(user=user, db=db)
     return user

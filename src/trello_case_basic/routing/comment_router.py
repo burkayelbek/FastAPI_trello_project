@@ -16,7 +16,7 @@ from src.schemas.comment import CommentCreate, CommentUpdate, CommentOut
 router = APIRouter()
 
 
-@router.post("/task/{id}/create_comment", response_model=CommentOut)
+@router.post("/job/{id}/create_comment", response_model=CommentOut)
 def create_comment(id: int,
                    comment: CommentCreate,
                    db: Session = Depends(get_db),
@@ -28,7 +28,7 @@ def create_comment(id: int,
     return new_comment
 
 
-@router.get("/task/{id}/all", response_model=List[CommentOut])
+@router.get("/job/{id}/all", response_model=List[CommentOut])
 def get_comments(id: int, db: Session = Depends(get_db),
                  current_user: UserModel = Depends(get_current_user_from_token)):
     comments = get_all_comments(db=db, id=id,user_id=current_user.id)
@@ -37,7 +37,7 @@ def get_comments(id: int, db: Session = Depends(get_db),
     return comments
 
 
-@router.get("/get-comments/{id}", response_model=CommentOut)
+@router.get("/get-comment-by-id/{id}", response_model=CommentOut)
 def get_specific_comment(id: int, db: Session = Depends(get_db),):
     comment = get_comment_by_id(id=id, db=db)
     if not comment:
@@ -45,7 +45,7 @@ def get_specific_comment(id: int, db: Session = Depends(get_db),):
     return comment
 
 
-@router.put("/update/{id}")
+@router.put("/update-comment-by-id/{id}")
 def update_comment(id: int, comment: CommentUpdate, db: Session = Depends(get_db),):
     selected_comment = update_comment_by_id(id=id, comment=comment, db=db)
     if not selected_comment:
@@ -53,7 +53,7 @@ def update_comment(id: int, comment: CommentUpdate, db: Session = Depends(get_db
     message = {"Status": "Successfully updated."}
     return message
 
-@router.delete("/delete/{id}")
+@router.delete("/delete-comment-by-id/{id}")
 def delete_comment(id: int, db: Session = Depends(get_db),
                    current_user: UserModel = Depends(get_current_user_from_token)):
     selected_comment = delete_comment_by_id(id=id, db=db)

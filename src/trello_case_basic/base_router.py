@@ -1,3 +1,5 @@
+from fastapi import APIRouter
+from src.trello_case_basic import index_page_router
 from src.trello_case_basic.routing import (
     user_router,
     login_router,
@@ -5,9 +7,7 @@ from src.trello_case_basic.routing import (
     job_router,
     comment_router
 )
-from src.trello_case_basic import index_page_router
 
-from fastapi import APIRouter
 
 router_base = APIRouter()
 
