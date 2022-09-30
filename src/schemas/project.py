@@ -6,11 +6,6 @@ class ProjectCreate(BaseModel):
     title: str
 
 
-class ProjectUpdate(BaseModel):
-    title: str
-    is_active: bool
-
-
 class ShowProject(BaseModel):
     id: int
     title: str
@@ -19,3 +14,8 @@ class ShowProject(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ProjectUpdate(BaseModel):
+    title: str
+    is_active: bool

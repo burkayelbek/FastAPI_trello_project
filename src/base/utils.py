@@ -1,18 +1,17 @@
-from typing import Dict, Optional
+from typing import (Dict, Optional)
 from fastapi import (HTTPException, Request, status)
-from fastapi.openapi.models import OAuthFlows
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
+from fastapi.openapi.models import OAuthFlows
 
 
 class AuthBearerToken(OAuth2):
-    def __init__(
-        self,
-        tokenUrl: str,
-        scheme_name: Optional[str] = None,
-        scopes: Optional[Dict[str, str]] = None,
-        auto_error: bool = True,
-    ):
+    def __init__(self,
+                 tokenUrl: str,
+                 scheme_name: Optional[str] = None,
+                 scopes: Optional[Dict[str, str]] = None,
+                 auto_error: bool = True,
+                 ):
         if not scopes:
             scopes = {}
         flows = OAuthFlows(password={"tokenUrl": tokenUrl, "scopes": scopes})
@@ -21,16 +20,15 @@ class AuthBearerToken(OAuth2):
     async def __call__(self, request: Request) -> Optional[str]:
         authorization: str = request.cookies.get(
             "access_token"
-        )  # changed to accept access token from httpOnly Cookie
+        )
 
         scheme, param = get_authorization_scheme_param(authorization)
-        if not authorization or scheme.lower() != "bearer":
+        if scheme.lower() != "bearer" or not authorization:
             if self.auto_error:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Not authenticated",
-                    headers={"WWW-Authenticate": "Bearer"},
-                )
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                    detail="Not authenticated",
+                                    headers={"WWW-Authenticate": "Bearer"},
+                                    )
             else:
                 return None
         return param

@@ -8,6 +8,6 @@ class CommentModel(Base):
 
     id = Column(Integer, primary_key=True,nullable=False, index=True)
     description = Column(String, nullable=False)
-    date_posted = Column(Date)
+    created_at = Column(Date)
     comment_id = Column(Integer, ForeignKey("jobs.id"))
     comment = relationship("JobModel", back_populates="comments", foreign_keys=[comment_id])

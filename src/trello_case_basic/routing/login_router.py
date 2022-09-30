@@ -8,9 +8,8 @@ from sqlalchemy.orm import Session
 from src.service.user import verify_password
 from src.base.utils import AuthBearerToken
 from src.base.settings import settings
-from src.service.user import get_user
+from src.service.user import get_user_by_id
 from src.base.database import get_db
-
 
 router = APIRouter()
 
@@ -31,7 +30,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 def authenticate_user(username: str, password: str, db: Session = Depends(get_db)):
-    user = get_user(username=username, db=db)
+    user = get_user_by_id(username=username, db=db)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -41,15 +40,15 @@ def authenticate_user(username: str, password: str, db: Session = Depends(get_db
 
 @router.post("/login", response_model=LoginToken)
 def login_for_access_token(
-    response: Response,
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
+        response: Response,
+        form_data: OAuth2PasswordRequestForm = Depends(),
+        db: Session = Depends(get_db),
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Username or password is wrong!",
         )
     access_token_expires = timedelta(minutes=59)
     access_token = create_access_token(
@@ -65,34 +64,21 @@ oauth2_scheme = AuthBearerToken(tokenUrl="/login/token")
 
 
 def get_current_user_from_token(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+        token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
-
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms="HS256"
         )
         email: str = payload.get("sub")
-        print("username/email extracted is ", email)
         if email is None:
-            raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials. Yetkiniz Yok!",
-    )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Unauthorized User. Do not have permission")
     except JWTError:
-        raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials. Yetkiniz Yok!",
-    )
-    user = get_user(username=email, db=db)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Unauthorized User. Do not have permission")
+    user = get_user_by_id(username=email, db=db)
     if user is None:
-        raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials. Yetkiniz Yok!",
-    )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Unauthorized User. Do not have permission")
     return user
-
-
-
-
-

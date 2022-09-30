@@ -27,3 +27,22 @@ services:
       - .env
     ports:
       - "6432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+
+  celery_worker:
+    image: trello-case-celery-worker
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - postgres

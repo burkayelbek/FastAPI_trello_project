@@ -18,4 +18,4 @@ class UserOut(BaseModel):
 
 class LoginToken(BaseModel):
     access_token: str
-    token_type:str
+    token_type: str
