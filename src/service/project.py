@@ -3,8 +3,7 @@ from src.models.project import ProjectModel
 from src.schemas.project import ProjectCreate
 from sqlalchemy.orm import Session
 from datetime import datetime
-from fastapi.encoders import jsonable_encoder
-
+from src.base.database import SessionLocal
 
 def create_new_project(project: ProjectCreate, db: Session, owner_id: int):
     new_project = ProjectModel(owner_id=owner_id,
@@ -49,3 +48,11 @@ def _get_existing_project(id: int, db: Session):
     project = db.query(ProjectModel).filter(ProjectModel.id == id)
     if project.first():
         return project
+
+
+def status_project_celery(user_id: int):
+    session = SessionLocal()
+    projects = session.query(ProjectModel).filter(ProjectModel.owner_id == user_id).all()
+    message = {"Status": f"{projects} completed successfully!"}
+    return message
+

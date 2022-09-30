@@ -12,6 +12,7 @@ from src.service.project import (
     get_project_by_id,
     full_update_project_by_id,
 )
+from src.trello_case_basic.schedule_conf import celery_task
 
 router = APIRouter()
 
@@ -57,3 +58,8 @@ def delete_project(id: int, db: Session = Depends(get_db),
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{id} - Project does not found")
     message = {"Status": "Successfully deleted."}
     return message
+
+@router.get("/status_task_celery")
+def celery_jobs(current_user: UserModel = Depends(get_current_user_from_token)):
+    jobs = celery_task.delay("status_task_celery", current_user.id)
+    return jobs

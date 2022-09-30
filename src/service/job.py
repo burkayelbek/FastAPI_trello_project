@@ -59,7 +59,7 @@ def _get_existing_job(id: int, db: Session):
         return selected_job
 
 
-def status_task_celery(user_id: int):
+def status_job_celery(user_id: int):
     session = SessionLocal()
     jobs = session.query(JobModel).filter(JobModel.job_owner_id == user_id).all()
     message = {"Status": f"{jobs} completed successfully!"}

@@ -18,10 +18,10 @@ router = APIRouter()
 
 
 @router.post("/project/{id}/create-job", response_model=JobOut)
-def create_task(id: int,
-                job: JobCreate,
-                db: Session = Depends(get_db),
-                current_user: UserModel = Depends(get_current_user_from_token)):
+def create_job(id: int,
+               job: JobCreate,
+               db: Session = Depends(get_db),
+               current_user: UserModel = Depends(get_current_user_from_token)):
     new_job = create_new_job(id=id, job=job, db=db, job_owner_id=current_user.id)
     if not new_job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{id} - Job does not found.")
@@ -64,7 +64,7 @@ def delete_job_by_id(id: int, db: Session = Depends(get_db), ):
     return message
 
 
-@router.get("/status_task_celery")
-def celery_jobs(current_user: UserModel = Depends(get_current_user_from_token), ):
-    jobs = celery_task.delay("status_task_celery", current_user.id)
+@router.get("/status_job_celery")
+def celery_jobs(current_user: UserModel = Depends(get_current_user_from_token)):
+    jobs = celery_task.delay("status_job_celery", current_user.id)
     return jobs
