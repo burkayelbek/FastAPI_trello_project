@@ -17,10 +17,10 @@ Apart from these dockerized with the docker application.
 Installation easy with docker-compose:
 
 #### Example .env file content:
-* POSTGRES_DB=fastapi-basic
+* POSTGRES_DB=trellodb
 * POSTGRES_HOST=postgres
-* POSTGRES_USER=fastapi
-* POSTGRES_PASSWORD=007007
+* POSTGRES_USER=trello
+* POSTGRES_PASSWORD=trellopass
 * POSTGRES_PORT=5432
 
 And after that
